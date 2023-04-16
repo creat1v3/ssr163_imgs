@@ -19,15 +19,19 @@ e.dataPath = 'https://ssr.res.netease.com/pc/zt/20191112204330/'
 e.bigCardId = img_id
 """
 
+shishen_name = None
+
+
 # download img
-def download_img(elem):
-    img_name = elem.get("name")
-    shishen_id = elem.get("id")
+def download_img(elems):
+    global shishen_name
+    img_name = elems.get("name")
+    shishen_id = elems.get("id")
     img_url = base_url + "data/card/" + str(shishen_id) + ".png?19"
     img_req = requests.get(img_url)
 
-    if elem.get('type') == '式神':
-        shishen_name = elem.get('name')
+    if elems.get('type') == '式神':
+        shishen_name = elems.get('name')
         try:
             # make directory of shishen
             os.mkdir(f'./imgs/{shishen_name}')
@@ -47,6 +51,7 @@ def download_img(elem):
                 fp.write(img_req.content)
 
     print(img_name)
+
 
 # use thread pool to download imgs
 with ThreadPoolExecutor() as executor:
